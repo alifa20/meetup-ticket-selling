@@ -2,6 +2,8 @@
 Adding online ticket selling to events on meetup.com website
 
 # HOW to run
+- nvm use 5.0.0
+
 - terminal in new tab
 
     > npm i

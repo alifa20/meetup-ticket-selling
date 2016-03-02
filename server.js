@@ -21,7 +21,7 @@ MongoClient.connect(process.env.MONGO_URL, (err, database) => {
   }
 
   db = database;
-  let listener = app.listen(3000, () => console.log('Listening on port 3000'));
+  let listener = app.listen(3000, () => console.log('Listening on port ', listener.address().port()));
 });
 
 app.get("/data/links", (req, res) => {
