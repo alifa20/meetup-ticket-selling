@@ -7,6 +7,7 @@ let _getAppState = () => {
   return { links: LinkStore.getAll() };
 };
 
+
 export default class Main extends React.Component {
   constructor(props) {
     super(props);

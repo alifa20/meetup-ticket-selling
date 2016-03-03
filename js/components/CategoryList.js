@@ -25,11 +25,16 @@ export default class CategoryList extends React.Component {
     this.setState(_getAppState());
   }
   render() {
-    let content = this.state.cats.map(cat => {
-      return <li key={cat.id}>
-               {cat.name}
-             </li>;
-    });
+    let content = null;
+    if (this.state.cats.results) {
+    	content = this.state.cats.results.map(cat => {
+		      return <li key={cat.id}>
+		               <a href='#'>{cat.name}</a>
+		             </li>;
+             });
+    }
+    
+    
     return (
       <div>
         <h3>Cats</h3>

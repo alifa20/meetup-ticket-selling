@@ -11,8 +11,8 @@ class CategoryStore extends EventEmitter {
     AppDispatcher.register(action => {
       switch(action.actionType) {
         case ActionTypes.RECEIVE_CATEGORIES:
-          console.log("3. In Store");
-          _categories = action.Categories;
+          console.log("3. In Category Store");
+          _categories = action.cats;
           this.emit("change");
           break;
         default:
