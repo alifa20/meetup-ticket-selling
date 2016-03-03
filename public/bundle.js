@@ -20167,6 +20167,10 @@
 	
 	var _LinkStore2 = _interopRequireDefault(_LinkStore);
 	
+	var _CategoryList = __webpack_require__(/*! ./CategoryList */ 170);
+	
+	var _CategoryList2 = _interopRequireDefault(_CategoryList);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20226,15 +20230,20 @@
 	      return _react2.default.createElement(
 	        "div",
 	        null,
+	        _react2.default.createElement(_CategoryList2.default, null),
 	        _react2.default.createElement(
-	          "h3",
+	          "div",
 	          null,
-	          "Links"
-	        ),
-	        _react2.default.createElement(
-	          "ul",
-	          null,
-	          content
+	          _react2.default.createElement(
+	            "h3",
+	            null,
+	            "Links"
+	          ),
+	          _react2.default.createElement(
+	            "ul",
+	            null,
+	            content
+	          )
 	        )
 	      );
 	    }
@@ -20272,6 +20281,13 @@
 	    // Ajax request to read /data/links
 	    (0, _jquery.get)("/data/links").done(function (resp) {
 	      _ServerActions2.default.receiveLinks(resp);
+	    });
+	  },
+	  fetchCategories: function fetchCategories() {
+	    console.log("1. In API");
+	    // Ajax request to read /data/links
+	    (0, _jquery.get)("https://api.meetup.com/2/categories").done(function (resp) {
+	      _ServerActions2.default.receiveCategories(resp);
 	    });
 	  }
 	};
@@ -30146,6 +30162,13 @@
 	      actionType: _Constants.ActionTypes.RECEIVE_LINKS,
 	      links: links
 	    });
+	  },
+	  receiveCategories: function receiveCategories(cats) {
+	    console.log("2. In ServerActions");
+	    _AppDispatcher2.default.dispatch({
+	      actionType: _Constants.ActionTypes.RECEIVE_CATEGORIES,
+	      cats: cats
+	    });
 	  }
 	};
 	
@@ -30880,6 +30903,174 @@
 	  return arg === void 0;
 	}
 
+
+/***/ },
+/* 170 */
+/*!***************************************!*\
+  !*** ./js/components/CategoryList.js ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _API = __webpack_require__(/*! ../API */ 160);
+	
+	var _API2 = _interopRequireDefault(_API);
+	
+	var _CategoryStore = __webpack_require__(/*! ../stores/CategoryStore */ 171);
+	
+	var _CategoryStore2 = _interopRequireDefault(_CategoryStore);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _getAppState = function _getAppState() {
+	  return { cats: _CategoryStore2.default.getAll() };
+	};
+	
+	var CategoryList = function (_React$Component) {
+	  _inherits(CategoryList, _React$Component);
+	
+	  function CategoryList(props) {
+	    _classCallCheck(this, CategoryList);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(CategoryList).call(this, props));
+	
+	    _this.state = _getAppState();
+	    _this.onChange = _this.onChange.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(CategoryList, [{
+	    key: "componentDidMount",
+	    value: function componentDidMount() {
+	      _API2.default.fetchCategories();
+	      _CategoryStore2.default.on("change", this.onChange);
+	    }
+	  }, {
+	    key: "componentWillUnmount",
+	    value: function componentWillUnmount() {
+	      _CategoryStore2.default.removeListener("change", this.onChange);
+	    }
+	  }, {
+	    key: "onChange",
+	    value: function onChange() {
+	      console.log("4. In the View");
+	      this.setState(_getAppState());
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var content = this.state.cats.map(function (cat) {
+	        return _react2.default.createElement(
+	          "li",
+	          { key: cat.id },
+	          cat.name
+	        );
+	      });
+	      return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(
+	          "h3",
+	          null,
+	          "Cats"
+	        ),
+	        _react2.default.createElement(
+	          "ul",
+	          null,
+	          content
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return CategoryList;
+	}(_react2.default.Component);
+	
+	exports.default = CategoryList;
+
+/***/ },
+/* 171 */
+/*!************************************!*\
+  !*** ./js/stores/CategoryStore.js ***!
+  \************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _AppDispatcher = __webpack_require__(/*! ../AppDispatcher */ 163);
+	
+	var _AppDispatcher2 = _interopRequireDefault(_AppDispatcher);
+	
+	var _Constants = __webpack_require__(/*! ../Constants */ 167);
+	
+	var _events = __webpack_require__(/*! events */ 169);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _categories = [];
+	
+	var CategoryStore = function (_EventEmitter) {
+	  _inherits(CategoryStore, _EventEmitter);
+	
+	  function CategoryStore(props) {
+	    _classCallCheck(this, CategoryStore);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(CategoryStore).call(this, props));
+	
+	    _AppDispatcher2.default.register(function (action) {
+	      switch (action.actionType) {
+	        case _Constants.ActionTypes.RECEIVE_CATEGORIES:
+	          console.log("3. In Store");
+	          _categories = action.Categories;
+	          _this.emit("change");
+	          break;
+	        default:
+	        // do nothing
+	      }
+	    });
+	    return _this;
+	  }
+	
+	  _createClass(CategoryStore, [{
+	    key: "getAll",
+	    value: function getAll() {
+	      return _categories;
+	    }
+	  }]);
+	
+	  return CategoryStore;
+	}(_events.EventEmitter);
+	
+	exports.default = new CategoryStore();
 
 /***/ }
 /******/ ]);

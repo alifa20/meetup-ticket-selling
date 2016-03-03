@@ -1,6 +1,7 @@
 import React from "react";
 import API from "../API";
 import LinkStore from "../stores/LinkStore";
+import CategoryList from "./CategoryList";
 
 let _getAppState = () => {
   return { links: LinkStore.getAll() };
@@ -31,11 +32,14 @@ export default class Main extends React.Component {
              </li>;
     });
     return (
-      <div>
-        <h3>Links</h3>
-        <ul>
-          {content}
-        </ul>
+      <div> 
+        <CategoryList />
+        <div>
+          <h3>Links</h3>
+          <ul>
+            {content}
+          </ul>
+        </div>
       </div>
     );
   }
