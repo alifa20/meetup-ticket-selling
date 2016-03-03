@@ -13,7 +13,16 @@ app.use('/graphql', GraphQLHTTP({
 
 let db;
 console.log('process.env.MONGO_URL',process.env.MONGO_URL);
-MongoClient.connect(process.env.MONGO_URL, (err, database) => {
+let dburl;
+if (process.env.MONGO_URL) {
+  dburl = process.env.MONGO_URL;
+}
+else {
+  // dburl = mongodb://ticket_event_user:123456velkon@ds055505.mongolab.com:55505/ticket_event;
+  dburl = 'mongodb://localhost:27017/ticket_event';
+}
+
+MongoClient.connect(dburl, (err, database) => {
   if (err) 
   {
   	console.log(err);
@@ -21,7 +30,7 @@ MongoClient.connect(process.env.MONGO_URL, (err, database) => {
   }
 
   db = database;
-  let listener = app.listen(3000, () => console.log('Listening on port ', listener.address().port()));
+  let listener = app.listen(3000, () => console.log('Listening on port ', listener.address().port));
 });
 
 app.get("/data/links", (req, res) => {
